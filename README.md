@@ -78,3 +78,20 @@ Prerequisites
 9. Head to server http://127.0.0.1:8000
 
 <br>
+
+### Run Celery:
+```
+celery -A credit_approval_system worker -l info
+```
+
+### Run Redis:
+
+```
+redis-server ()
+```
+
+```
+redis-cli
+KEYS *
+GET celery-task-meta-<task-id>
+```
