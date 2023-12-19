@@ -31,6 +31,6 @@ admin.site.register(Customer, CustomerAdmin)
 
 class LoanAdmin(admin.ModelAdmin):
     list_display = ["customer", "loan_id"]
-    ordering = ["pk"]
+    ordering = ["id"]
 
 admin.site.register(Loan, LoanAdmin)

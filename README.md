@@ -87,7 +87,7 @@ celery -A credit_approval_system worker -l info
 ### Run Redis:
 
 ```
-redis-server ()
+redis-server
 ```
 
 ```
