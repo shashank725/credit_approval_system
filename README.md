@@ -79,12 +79,12 @@ Prerequisites
 
 <br>
 
-### Run Celery:
+#### Run Celery:
 ```
 celery -A credit_approval_system worker -l info
 ```
 
-### Run Redis:
+#### Run Redis:
 
 ```
 redis-server
@@ -94,4 +94,21 @@ redis-server
 redis-cli
 KEYS *
 GET celery-task-meta-<task-id>
+```
+
+### Project Setup : (With Docker)
+
+Prerequisites
+1. docker
+2. docker compose
+
+3. If using postgres image for the 1st time, run the below cmd :
+
+```
+docker run -e POSTGRES_PASSWORD=your_password -p 5432:5432 -d postgres:latest
+```
+
+4. Build and run the docker compose file
+```
+docker compose up
 ```

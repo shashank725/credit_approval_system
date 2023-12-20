@@ -1,0 +1,10 @@
+.git/
+venv/
+db.sqlite3
+# data/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Postman collection
+credit_approval_system.postman_collection.json

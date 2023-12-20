@@ -1,0 +1,75 @@
+version: '3'
+
+services:
+
+  django_gunicorn:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    command: >
+        sh -c "python manage.py makemigrations && python manage.py migrate --run-syncdb && 
+        python3 manage.py collectstatic --no-input && 
+        gunicorn credit_approval_system.wsgi:application --timeout 60 --bind 0.0.0.0:8000"
+    # command: './entrypoint.sh'
+    volumes:
+      - static:/code/static
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  # Postgres
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    container_name: postgres_db
+    env_file:
+      # - .env
+      .env
+    # environment:
+    #   DB_HOST: db
+    #   POSTGRES_DB: postgres
+    #   POSTGRES_USER: postgres
+    #   POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"    
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/code/static
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+      - django_gunicorn
+  
+  redis:
+    image: redis:alpine
+    container_name: redis
+
+  celery:
+    restart: always
+    build:
+      context: .
+    container_name: celery
+    command: celery -A credit_approval_system worker -l info
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+      - django_gunicorn
+
+  
+
+volumes:
+  db_data:
+  static:
