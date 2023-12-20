@@ -8,12 +8,14 @@ services:
       dockerfile: Dockerfile
     container_name: backend
     command: >
-        sh -c "python manage.py makemigrations && python manage.py migrate --run-syncdb && 
+        bash -c "python manage.py makemigrations && python manage.py migrate --run-syncdb && 
         python3 manage.py collectstatic --no-input && 
-        gunicorn credit_approval_system.wsgi:application --timeout 60 --bind 0.0.0.0:8000"
+        gunicorn credit_approval_system.wsgi:application --workers 3 --bind 0.0.0.0:8000"
     # command: './entrypoint.sh'
     volumes:
+      # - .:/app                        # To save the changes
       - static:/code/static
+      # - media:/app/media
     env_file:
       - .env
     ports:
@@ -29,8 +31,8 @@ services:
       - db_data:/var/lib/postgresql/data/
     container_name: postgres_db
     env_file:
-      # - .env
-      .env
+      - .env
+      # .env
     # environment:
     #   DB_HOST: db
     #   POSTGRES_DB: postgres

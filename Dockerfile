@@ -1,17 +1,16 @@
-FROM python:3.10-alpine
+FROM python:3.10
 
 ENV PYTHONNUMBUFFERED 1
-RUN pip install --upgrade pip
+RUN pip install --no-cache-dir --upgrade pip
 
-RUN mkdir /code
 WORKDIR /code
 # RUN pip install --no-cache-dir --upgrade pip && \
     # pip install --no-cache-dir -r requirements.txt
 
-COPY requirements.txt /code/
-RUN pip install -r requirements.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /code 
+COPY . .
 
 # RUN python manage.py makemigrations && manage.py migrate 
 # ENTRYPOINT [ "sh", "entrypoint.sh" ]
